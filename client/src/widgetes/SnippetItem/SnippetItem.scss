@@ -1,0 +1,99 @@
+.snippet__item {
+  display: flex;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: white;
+  list-style: none;
+  height: auto;
+  min-height: 200px;
+  width: 22vw;
+}
+
+.snippet__icon {
+  font-size: 24px;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.snippet__content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+}
+
+.snippet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.snippet__title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  font-size: 25px;
+}
+
+.snippet__id {
+  font-size: 12px;
+  color: #999;
+  visibility: hidden;
+}
+/*описание с переносами на 3 линии и при переполнении прописывается три точки*/
+.snippet__description {
+  font-size: 20px;
+  color: #666;
+  line-height: 1.2;
+  /* Для line-clamp обязательно нужны: */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  /* Добавляем перенос слов */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.snippet__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: auto;
+  margin-bottom: 10px;
+  margin-left: -40px;
+}
+
+.snippet__tag {
+  font-size: 12px;
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border-radius: 16px;
+  color: #555;
+}
+
+.snippet__tag:first-child {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+.snippet__tag--0 {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+.snippet__tag--1 {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+.snippet__tag--2 {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}

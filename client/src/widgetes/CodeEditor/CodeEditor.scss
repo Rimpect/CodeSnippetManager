@@ -1,0 +1,31 @@
+.editor__inner {
+  display: flex;
+  flex-direction: column;
+}
+.editor__menu {
+  display: flex;
+  width: 100%;
+}
+.editor__description {
+  &-name {
+  }
+}
+.editor__form {
+  display: block;
+  
+}
+.editor__ide {
+  flex: 1;
+  position: relative;
+  width: 55%;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.editor__wrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}

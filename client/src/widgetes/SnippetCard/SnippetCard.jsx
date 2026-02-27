@@ -13,7 +13,7 @@ export default function SnippetCard() {
       id: 2,
       title: "useEffect Hook",
       description:
-        "Управление побочными эффектами в функциональных компонентах",
+        "Управление побочными эффектами в функциональных",
       tags: ["react", "hooks", "useEffect", "lifecycle"],
     },
     {

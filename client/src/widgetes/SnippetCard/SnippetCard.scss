@@ -1,15 +1,17 @@
 .card__container {
-//   padding: 0 75px; /* Отступы по бокам 75px */
+  max-width: 1600px;
+  margin: auto;
+  background-color: #ffffff;
 }
 
 .card__list {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 элемента в ряд */
-  gap: 50px; /* Отступы между элементами 50px со всех сторон */
+  gap: 30px;
   list-style: none;
   padding: 0;
   margin: 0;
-  
+
   /* Если нужен цвет для всего списка */
   color: green;
 }

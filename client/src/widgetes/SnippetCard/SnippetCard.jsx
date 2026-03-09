@@ -1,6 +1,7 @@
 import React from "react";
 import SnippetItem from "../SnippetItem/SnippetItem";
 import "./SnippetCard.scss";
+import { Link } from "react-router-dom";
 export default function SnippetCard() {
   const snippetCardArr = [
     {
@@ -12,8 +13,7 @@ export default function SnippetCard() {
     {
       id: 2,
       title: "useEffect Hook",
-      description:
-        "Управление побочными эффектами в функциональных",
+      description: "Управление побочными эффектами в функциональных",
       tags: ["react", "hooks", "useEffect", "lifecycle"],
     },
     {
@@ -45,7 +45,10 @@ export default function SnippetCard() {
     <div className="card__container">
       <ul className="card__list">
         {snippetCardArr.map((snippet) => (
-          <SnippetItem key={snippet.id} {...snippet} />
+          <Link key={snippet.id} to={`/editor/${snippet.id}`}>
+            <SnippetItem {...snippet} />{" "}
+ 
+          </Link>
         ))}
       </ul>
     </div>

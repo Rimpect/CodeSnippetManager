@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import Editor from "@monaco-editor/react";
 import Select from "react-select";
 import "./CodeEditor.scss";
-
+import { saveSnippet } from "../../features/snippet/StorageSnippet";
 export default function CodeEditor() {
-  const [selectedLanguage, setSelectedLanguage] = useState(null);
-
   const language = [
     { value: "javascript", label: "JavaScript" },
     { value: "python", label: "Python" },
@@ -13,13 +11,36 @@ export default function CodeEditor() {
     { value: "cpp", label: "C++" },
   ];
 
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
+  const [code, setCode] = useState("");
+  const [tags, setTags] = useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [currentSnippetId, setCurrentSnippetId] = useState(null);
+  const handleSave = () => {
+    // здесь собираем данные из состояний
+    const snippetData = {
+      title: title,
+      description: description,
+      language: selectedLanguage,
+      code: code,
+      tags: tags,
+      isFavorite: isFavorite,
+      currentSnippetId: currentSnippetId,
+    };
+
+    // вызываем импортированную функцию
+    saveSnippet(snippetData);
+  };
   return (
     <div className="editor__inner">
       <div className="editor__menu">
-        <button className="editor__menu-buttons--back">
-          кнопка назад
-        </button>
-        <button className="editor__menu-buttons--add-or-save">
+        <button className="editor__menu-buttons--back">кнопка назад</button>
+        <button
+          className="editor__menu-buttons--add-or-save"
+          onClick={handleSave}
+        >
           кнопка добавить/сохранить
         </button>
         <button className="editor__menu-buttons--delete">кнопка удалить</button>

@@ -1,0 +1,124 @@
+// Header.scss
+.header {
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb; // gray-200
+  padding: 1rem 1.5rem; // px-6 py-4
+
+  &__inner {
+    max-width: 80rem; // max-w-7xl (1280px)
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem; // gap-4
+  }
+
+  // Поисковый блок
+  &__search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; // gap-2
+    background-color: #f9fafb; // gray-50
+    border: 1px solid #e5e7eb; // gray-200
+    border-radius: 0.5rem; // rounded-lg
+    padding: 0.625rem 1rem; // px-4 py-2.5 (10px 16px)
+    
+    &-icon {
+      width: 1.25rem; // size-5 (20px)
+      height: 1.25rem;
+      color: #9ca3af; // gray-400
+      flex-shrink: 0;
+    }
+    
+    &-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #111827; // gray-900
+      
+      &::placeholder {
+        color: #9ca3af; // gray-400
+      }
+      
+      // Убираем стандартные стили input
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px #f9fafb inset;
+      }
+    }
+  }
+
+  // Кнопка фильтров
+  &__filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; // gap-2
+    padding: 0.625rem 1rem; // px-4 py-2.5
+    background-color: white;
+    border: 1px solid #d1d5db; // gray-300
+    border-radius: 0.5rem; // rounded-lg
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+    
+    &:hover {
+      background-color: #f9fafb; // gray-50
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+
+  // Кнопка создания
+  &__create-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background-color: #2563eb; // blue-600
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+    
+    &:hover {
+      background-color: #1d4ed8; // blue-700
+    }
+    
+    &-icon {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 640px) {
+  .header {
+    padding: 0.75rem 1rem;
+    
+    &__inner {
+      flex-wrap: wrap;
+    }
+    
+    &__search {
+      order: 1;
+      flex: 0 0 100%;
+      margin-bottom: 0.5rem;
+    }
+    
+    &__filter-btn span,
+    &__create-btn span {
+      display: none; // Прячем текст на мобильных
+    }
+    
+    &__filter-btn,
+    &__create-btn {
+      padding: 0.625rem; // Оставляем только иконки
+    }
+  }
+}

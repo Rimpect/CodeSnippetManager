@@ -1,5 +1,6 @@
 import React from "react";
 import "./SnippetItem.scss";
+import { Link } from "react-router-dom";
 export default function SnippetItem(props) {
   const { id, title, description, tags } = props;
   return (

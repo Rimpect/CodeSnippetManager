@@ -3,6 +3,7 @@ import Editor from "@monaco-editor/react";
 import Select from "react-select";
 import "./CodeEditor.scss";
 import { saveSnippet } from "../../features/snippet/StorageSnippet";
+import { Link } from "react-router-dom";
 export default function CodeEditor() {
   const language = [
     { value: "javascript", label: "JavaScript" },
@@ -21,13 +22,13 @@ export default function CodeEditor() {
   const handleSave = () => {
     // здесь собираем данные из состояний
     const snippetData = {
+      id: currentSnippetId || crypto.randomUUID(),
       title: title,
       description: description,
       language: selectedLanguage,
       code: code,
       tags: tags,
       isFavorite: isFavorite,
-      currentSnippetId: currentSnippetId,
     };
 
     // вызываем импортированную функцию
@@ -36,13 +37,17 @@ export default function CodeEditor() {
   return (
     <div className="editor__inner">
       <div className="editor__menu">
-        <button className="editor__menu-buttons--back">кнопка назад</button>
+        <Link to="/" className="editor__menu-buttons--back">
+          кнопка назад
+        </Link>
+
         <button
           className="editor__menu-buttons--add-or-save"
           onClick={handleSave}
         >
           кнопка добавить/сохранить
         </button>
+
         <button className="editor__menu-buttons--delete">кнопка удалить</button>
       </div>
 
@@ -53,6 +58,8 @@ export default function CodeEditor() {
             <input
               className="editor__title-input"
               placeholder="Например: React useState hook"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
 
@@ -62,6 +69,8 @@ export default function CodeEditor() {
               className="editor__description-textarea"
               placeholder="Краткое описание сниппета"
               rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
 
@@ -98,7 +107,11 @@ export default function CodeEditor() {
 
           <div className="editor__favorites">
             <label className="editor__favorites-checkbox">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={isFavorite}
+                onChange={(e) => setIsFavorite(e.target.checked)}
+              />
               <span>Добавить в избранное</span>
             </label>
           </div>
@@ -111,7 +124,10 @@ export default function CodeEditor() {
           </div>
           <div className="editor__ide">
             <Editor
+              value={code}
+              onChange={(value) => setCode(value || "")}
               defaultLanguage="javascript"
+              defaultValue="// Напишите ваш код здесь"
               theme="vs-dark"
               options={{
                 minimap: { enabled: false },

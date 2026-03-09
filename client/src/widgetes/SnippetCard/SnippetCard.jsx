@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import SnippetItem from "../SnippetItem/SnippetItem";
 import "./SnippetCard.scss";
 import { Link } from "react-router-dom";
 export default function SnippetCard() {
-  const snippetCardArr = [
+  const defaultSnippets = [
     {
       id: 1,
       title: "Async/Await Fetch",
@@ -41,13 +41,19 @@ export default function SnippetCard() {
       tags: ["css", "grid", "layout", "responsive"],
     },
   ];
+
+  const [snippets, setSnippets] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  if (!isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
   return (
     <div className="card__container">
       <ul className="card__list">
-        {snippetCardArr.map((snippet) => (
+        {defaultSnippets.map((snippet) => (
           <Link key={snippet.id} to={`/editor/${snippet.id}`}>
             <SnippetItem {...snippet} />{" "}
- 
           </Link>
         ))}
       </ul>

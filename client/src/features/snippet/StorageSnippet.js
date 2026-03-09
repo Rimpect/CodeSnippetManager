@@ -1,23 +1,28 @@
 export const saveSnippet = (snippet) => {
-  // Объявляем переменную через let, пока без значения
-  let snippets;
+  if (!snippet.id) {
+    snippet.id = crypto.randomUUID();
+  }
 
-  // Получаем данные из localStorage по ключу 'snippets'
+  let snippets;
   const stored = localStorage.getItem("codeSnippets");
 
   if (stored === null) {
-    // Если ничего нет, создаем пустой массив
     snippets = [];
   } else {
-    // Если есть, парсим строку в массив
     snippets = JSON.parse(stored);
   }
 
-  // Дальше работаем с массивом snippets
-  console.log(snippets); // посмотрим, что получилось
+  const existingIndex = snippets.findIndex((s) => s.id === snippet.id);
 
-//   const existingIndex = snippets.findIndex((s) => s.id === snippet.id);
-//   console.log(existingIndex);
-//   console.log(snippet.id);
-  localStorage.setItem("codeSnippets", snippet);
+  //   const existingIndex = snippets.findIndex((s) => s.id === snippet.id);
+  console.log(existingIndex);
+  console.log(snippet.id);
+  if (existingIndex === -1) {
+    snippets.push(snippet);
+  } else {
+    snippets[existingIndex] = snippet;
+  }
+  localStorage.setItem("codeSnippets", JSON.stringify(snippets));
+
+  return snippet;
 };

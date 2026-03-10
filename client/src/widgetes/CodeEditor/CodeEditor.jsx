@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import Select from "react-select";
 import "./CodeEditor.scss";
 import { saveSnippet } from "../../features/snippet/StorageSnippet";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 export default function CodeEditor() {
   const language = [
     { value: "javascript", label: "JavaScript" },
@@ -11,6 +11,7 @@ export default function CodeEditor() {
     { value: "java", label: "Java" },
     { value: "cpp", label: "C++" },
   ];
+  const { id } = useParams();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -20,7 +21,6 @@ export default function CodeEditor() {
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentSnippetId, setCurrentSnippetId] = useState(null);
   const handleSave = () => {
-    // здесь собираем данные из состояний
     const snippetData = {
       id: currentSnippetId || crypto.randomUUID(),
       title: title,
@@ -31,9 +31,32 @@ export default function CodeEditor() {
       isFavorite: isFavorite,
     };
 
-    // вызываем импортированную функцию
     saveSnippet(snippetData);
   };
+
+  useEffect(() => {
+    const loadSnippet = (snippetId) => {
+      const stored = localStorage.getItem("codeSnippets");
+      if (stored) {
+        const snippets = JSON.parse(stored);
+        const snippet = snippets.find(({id}) => id === snippetId);
+
+        if (snippet) {
+          setTitle(snippet.title || "");
+          setDescription(snippet.description || "");
+          setSelectedLanguage(snippet.language || null);
+          setCode(snippet.code || "");
+          setTags(snippet.tags || []);
+          setIsFavorite(snippet.isFavorite || false);
+          setCurrentSnippetId(snippet.id);
+        }
+      }
+    };
+    if (id) {
+      loadSnippet(id);
+    }
+  }, [id]);
+
   return (
     <div className="editor__inner">
       <div className="editor__menu">

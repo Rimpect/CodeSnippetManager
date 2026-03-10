@@ -44,14 +44,51 @@ export default function SnippetCard() {
 
   const [snippets, setSnippets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  if (!isLoading) {
+
+  // можно будет вынести этот код с помощью кастомного хука
+  useEffect(() => {
+    const loadSnippets = () => {
+      try {
+        const stored = localStorage.getItem("codeSnippets");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            setSnippets(parsed);
+          } else {
+            setSnippets(defaultSnippets);
+          }
+        } else {
+          localStorage.setItem("codeSnippets", JSON.stringify(defaultSnippets));
+          setSnippets(defaultSnippets);
+        }
+      } catch (error) {
+        console.error("Ошибка загрузки сниппетов:", error);
+        setSnippets(defaultSnippets);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadSnippets();
+
+    const handleStorageChange = (e) => {
+      if (e.key === "codeSnippets") {
+        loadSnippets();
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  if (isLoading) {
     return <div>Загрузка...</div>;
   }
 
   return (
     <div className="card__container">
       <ul className="card__list">
-        {defaultSnippets.map((snippet) => (
+        {snippets.map((snippet) => (
           <Link key={snippet.id} to={`/editor/${snippet.id}`}>
             <SnippetItem {...snippet} />{" "}
           </Link>

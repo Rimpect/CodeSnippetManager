@@ -4,6 +4,7 @@ import Select from "react-select";
 import "./CodeEditor.scss";
 import { saveSnippet } from "../../features/snippet/StorageSnippet";
 import { Link, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export default function CodeEditor() {
   const language = [
     { value: "javascript", label: "JavaScript" },
@@ -12,7 +13,7 @@ export default function CodeEditor() {
     { value: "cpp", label: "C++" },
   ];
   const { id } = useParams();
-
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState(null);
@@ -20,6 +21,7 @@ export default function CodeEditor() {
   const [tags, setTags] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentSnippetId, setCurrentSnippetId] = useState(null);
+
   const handleSave = () => {
     const snippetData = {
       id: currentSnippetId || crypto.randomUUID(),
@@ -32,6 +34,7 @@ export default function CodeEditor() {
     };
 
     saveSnippet(snippetData);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export default function CodeEditor() {
       const stored = localStorage.getItem("codeSnippets");
       if (stored) {
         const snippets = JSON.parse(stored);
-        const snippet = snippets.find(({id}) => id === snippetId);
+        const snippet = snippets.find(({ id }) => id === snippetId);
 
         if (snippet) {
           setTitle(snippet.title || "");
@@ -56,22 +59,30 @@ export default function CodeEditor() {
       loadSnippet(id);
     }
   }, [id]);
-
+  
+  const handleDelete = () => {
+    const items = JSON.parse(localStorage.getItem("codeSnippets"));
+    const updatedItems = items.filter((item) => item.id != id);
+    localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
+    navigate("/");
+  };
   return (
     <div className="editor__inner">
       <div className="editor__menu">
         <Link to="/" className="editor__menu-buttons--back">
-          кнопка назад
+          Назад
         </Link>
 
         <button
           className="editor__menu-buttons--add-or-save"
           onClick={handleSave}
         >
-          кнопка добавить/сохранить
+          Сохранить
         </button>
 
-        <button className="editor__menu-buttons--delete">кнопка удалить</button>
+        <button className="editor__menu-buttons--delete" onClick={handleDelete}>
+          удалить
+        </button>
       </div>
 
       <div className="editor__main">

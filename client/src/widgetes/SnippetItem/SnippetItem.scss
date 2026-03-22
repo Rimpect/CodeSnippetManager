@@ -3,7 +3,7 @@
 
   list-style: none;
   height: auto;
-  min-height: 100px;
+  min-height: 200px;
   width: auto;
   max-width: 80rem;
 
@@ -13,9 +13,9 @@
   padding-bottom: 2rem;
 
   background-color: white;
-  border: 1px solid #e5e7eb; /* gray-200 */
-  border-radius: 0.5rem; /* rounded-lg = 8px */
-  padding: 1rem; /* p-4 = 16px */
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
   cursor: pointer;
   transition: all 150ms ease-in-out;
   &:hover {
@@ -39,7 +39,7 @@
   border-radius: 0.5rem;
   color: oklch(0.488 0.243 264.376);
   &:hover {
-    background-color: #dbeafe; /* bg-blue-100 */
+    background-color: #dbeafe;
   }
 }
 
@@ -71,20 +71,18 @@
   color: #999;
   visibility: hidden;
 }
-/*описание с переносами на 3 линии и при переполнении прописывается три точки*/
 .snippet__description {
   padding-left: 15px;
   font-size: 20px;
   color: #666;
   line-height: 1.2;
-  /* Для line-clamp обязательно нужны: */
+
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  /* Добавляем перенос слов */
-  word-wrap: break-word;
+  word-break: break-all;
   overflow-wrap: break-word;
 }
 
@@ -92,37 +90,30 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  // padding: 0 !important;
+
   margin-top: auto;
   margin-bottom: 10px;
   margin-left: -40px;
 }
 
 .snippet__tag {
-  padding-left: 0.625rem; /* 10px */
-  padding-right: 0.625rem; /* 10px */
+  padding-left: 0.625rem;
+  padding-right: 0.625rem;
 
-  /* py-1 = padding top/bottom */
-  padding-top: 0.25rem; /* 4px */
-  padding-bottom: 0.25rem; /* 4px */
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 
-  /* text-xs */
-  font-size: 0.75rem; /* 12px */
-  line-height: 1rem; /* 16px */
+  font-size: 0.75rem;
+  line-height: 1rem;
 
-  /* rounded-full */
   border-radius: 9999px;
 
-  /* bg-gray-100 */
   background-color: #f3f4f6;
 
-  /* text-gray-700 */
   color: #374151;
 
-  /* border border-gray-200 */
   border: 1px solid #e5e7eb;
 
-  /* Дополнительно: для красивого отображения */
   display: inline-block;
   white-space: nowrap;
 }

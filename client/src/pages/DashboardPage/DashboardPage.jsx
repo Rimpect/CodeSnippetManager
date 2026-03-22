@@ -1,10 +1,8 @@
 import React from "react";
 import Dashboard from "../../widgetes/Dashboard/Dashboard";
-
+import { useOutletContext } from "react-router-dom";
 export default function DashboardPage() {
-  return (
-    <div>
-      <Dashboard />
-    </div>
-  );
+  const { searchQuery } = useOutletContext();
+
+  return <Dashboard searchQuery={searchQuery} />;
 }

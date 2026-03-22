@@ -62,7 +62,7 @@ export default function CodeEditor() {
 
   const handleDelete = () => {
     const items = JSON.parse(localStorage.getItem("codeSnippets"));
-    const updatedItems = items.filter((item) => item.id != id);
+    const updatedItems = items.filter((item) => item.id !== id);
     localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
     navigate("/");
   };
@@ -79,13 +79,11 @@ export default function CodeEditor() {
       const currentItem = items[index];
       const currentTags = currentItem.tags || [];
 
-  
       if (currentTags.includes(tagValue)) {
         alert("Такой тег уже существует");
         return;
       }
 
-     
       const updatedItem = {
         ...currentItem,
         tags: [...currentTags, tagValue],
@@ -99,11 +97,7 @@ export default function CodeEditor() {
     }
   };
 
-  useEffect(() => {
-    const items = JSON.parse(localStorage.getItem("codeSnippets"));
-    const index = items.findIndex((item) => item.id === id);
-  }, [tags]);
-  return (    
+  return (
     <div className="editor__inner">
       <div className="editor__menu">
         <Link to="/" className="editor__menu-buttons--back">

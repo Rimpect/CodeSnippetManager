@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import SnippetItem from "../SnippetItem/SnippetItem";
 import "./SnippetCard.scss";
 import { Link } from "react-router-dom";
-export default function SnippetCard() {
+import Fuse from "fuse.js";
+export default function SnippetCard({ searchQuery }) {
   const defaultSnippets = [
     {
       id: "1",
@@ -44,6 +45,16 @@ export default function SnippetCard() {
 
   const [snippets, setSnippets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const filteredSnippets = (() => {
+    if (!searchQuery) return snippets;
+
+    const fuse = new Fuse(snippets, {
+      keys: ["title"],
+    });
+
+    return fuse.search(searchQuery).map((res) => res.item);
+  })();
 
   // можно будет вынести этот код с помощью кастомного хука
   useEffect(() => {
@@ -88,7 +99,7 @@ export default function SnippetCard() {
   return (
     <div className="card__container">
       <ul className="card__list">
-        {snippets.map((snippet) => (
+        {filteredSnippets.map((snippet) => (
           <Link key={snippet.id} to={`/editor/${snippet.id}`}>
             <SnippetItem {...snippet} />{" "}
           </Link>

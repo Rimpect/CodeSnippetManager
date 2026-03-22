@@ -1,13 +1,12 @@
 import Header from "../widgetes/Header/Header";
-// import Footer from "../components/Footer";
 import { Outlet } from "react-router-dom";
 
-function Layout({onCreateClick}) {
+function Layout({ searchQuery, setSearchQuery }) {
   return (
     <div>
-      <Header onCreateClick={onCreateClick} />
+      <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
       <main>
-        <Outlet />
+        <Outlet context={{ searchQuery }} />
       </main>
     </div>
   );

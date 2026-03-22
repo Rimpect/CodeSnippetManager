@@ -59,14 +59,51 @@ export default function CodeEditor() {
       loadSnippet(id);
     }
   }, [id]);
-  
+
   const handleDelete = () => {
     const items = JSON.parse(localStorage.getItem("codeSnippets"));
     const updatedItems = items.filter((item) => item.id != id);
     localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
     navigate("/");
   };
-  return (
+
+  const handleAddTag = (tagValue) => {
+    if (!tagValue || tagValue.trim() === "") {
+      alert("Введите тег");
+      return;
+    }
+
+    const items = JSON.parse(localStorage.getItem("codeSnippets"));
+    const index = items.findIndex((item) => item.id === id);
+    if (index !== -1) {
+      const currentItem = items[index];
+      const currentTags = currentItem.tags || [];
+
+  
+      if (currentTags.includes(tagValue)) {
+        alert("Такой тег уже существует");
+        return;
+      }
+
+     
+      const updatedItem = {
+        ...currentItem,
+        tags: [...currentTags, tagValue],
+      };
+
+      const updatedItems = [...items];
+      updatedItems[index] = updatedItem;
+
+      localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
+      // setSnippets(updatedItems);
+    }
+  };
+
+  useEffect(() => {
+    const items = JSON.parse(localStorage.getItem("codeSnippets"));
+    const index = items.findIndex((item) => item.id === id);
+  }, [tags]);
+  return (    
     <div className="editor__inner">
       <div className="editor__menu">
         <Link to="/" className="editor__menu-buttons--back">
@@ -128,15 +165,19 @@ export default function CodeEditor() {
             <label>Теги</label>
             <div className="editor__tags-input-group">
               <input type="text" placeholder="Добавьте тег..." />
-              <button type="button" className="editor__tags-add">
+              <button
+                type="button"
+                className="editor__tags-add"
+                onClick={(e) => handleAddTag(e.target.value)}
+              >
                 Добавить
               </button>
             </div>
-            <div className="editor__tags-list">
+            <ul className="editor__tags-list">
               {/* Список тегов будет здесь */}
-              <span className="editor__tag">react</span>
-              <span className="editor__tag">javascript</span>
-            </div>
+              <li className="editor__tag">react</li>
+              <li className="editor__tag">javascript</li>
+            </ul>
           </div>
 
           <div className="editor__favorites">

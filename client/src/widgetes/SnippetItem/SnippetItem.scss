@@ -4,6 +4,7 @@
   list-style: none;
   height: auto;
   min-height: 200px;
+
   width: auto;
   max-width: 80rem;
 
@@ -82,7 +83,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 
-  word-break: break-all;
+  word-break: break-word;
   overflow-wrap: break-word;
 }
 

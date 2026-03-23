@@ -22,7 +22,7 @@ export default function CodeEditor() {
   const [tags, setTags] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentSnippetId, setCurrentSnippetId] = useState(null);
-  const [newTag, setNewTag] = useState(""); // Состояние для нового тега
+  const [newTag, setNewTag] = useState("");
 
   const handleSave = () => {
     const snippetData = {
@@ -70,25 +70,21 @@ export default function CodeEditor() {
   };
 
   const handleAddTag = () => {
-    // Используем newTag из состояния
     const tagValue = newTag.trim();
 
-    if (!tagValue) {
+    if (!tagValue || tagValue.length >= 10) {
       alert("Введите тег");
       return;
     }
 
-    // Проверяем, существует ли уже такой тег
     if (tags.includes(tagValue)) {
       alert("Такой тег уже существует");
       return;
     }
 
-    // Обновляем локальное состояние
     const updatedTags = [...tags, tagValue];
     setTags(updatedTags);
 
-    // Если это редактирование существующего сниппета
     if (id) {
       const items = JSON.parse(localStorage.getItem("codeSnippets"));
       const index = items.findIndex((item) => item.id === id);
@@ -103,11 +99,9 @@ export default function CodeEditor() {
       }
     }
 
-    // Очищаем поле ввода
     setNewTag("");
   };
 
-  // Функция для удаления тега
   const handleRemoveTag = (tagToRemove) => {
     const updatedTags = tags.filter((tag) => tag !== tagToRemove);
     setTags(updatedTags);
@@ -191,13 +185,13 @@ export default function CodeEditor() {
               <input
                 type="text"
                 placeholder="Добавьте тег..."
-                value={newTag} // Связываем с состоянием
-                onChange={(e) => setNewTag(e.target.value)} // Обновляем состояние при вводе
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
               />
               <button
                 type="button"
                 className="editor__tags-add"
-                onClick={handleAddTag} // Убираем value и onChange с кнопки
+                onClick={handleAddTag}
               >
                 Добавить
               </button>

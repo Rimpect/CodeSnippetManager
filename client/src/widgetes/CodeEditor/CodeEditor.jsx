@@ -5,6 +5,7 @@ import "./CodeEditor.scss";
 import { saveSnippet } from "../../features/snippet/StorageSnippet";
 import { Link, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+
 export default function CodeEditor() {
   const language = [
     { value: "javascript", label: "JavaScript" },
@@ -21,6 +22,7 @@ export default function CodeEditor() {
   const [tags, setTags] = useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [currentSnippetId, setCurrentSnippetId] = useState(null);
+  const [newTag, setNewTag] = useState(""); // Состояние для нового тега
 
   const handleSave = () => {
     const snippetData = {
@@ -67,33 +69,61 @@ export default function CodeEditor() {
     navigate("/");
   };
 
-  const handleAddTag = (tagValue) => {
-    if (!tagValue || tagValue.trim() === "") {
+  const handleAddTag = () => {
+    // Используем newTag из состояния
+    const tagValue = newTag.trim();
+
+    if (!tagValue) {
       alert("Введите тег");
       return;
     }
 
-    const items = JSON.parse(localStorage.getItem("codeSnippets"));
-    const index = items.findIndex((item) => item.id === id);
-    if (index !== -1) {
-      const currentItem = items[index];
-      const currentTags = currentItem.tags || [];
+    // Проверяем, существует ли уже такой тег
+    if (tags.includes(tagValue)) {
+      alert("Такой тег уже существует");
+      return;
+    }
 
-      if (currentTags.includes(tagValue)) {
-        alert("Такой тег уже существует");
-        return;
+    // Обновляем локальное состояние
+    const updatedTags = [...tags, tagValue];
+    setTags(updatedTags);
+
+    // Если это редактирование существующего сниппета
+    if (id) {
+      const items = JSON.parse(localStorage.getItem("codeSnippets"));
+      const index = items.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        const updatedItem = {
+          ...items[index],
+          tags: updatedTags,
+        };
+        const updatedItems = [...items];
+        updatedItems[index] = updatedItem;
+        localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
       }
+    }
 
-      const updatedItem = {
-        ...currentItem,
-        tags: [...currentTags, tagValue],
-      };
+    // Очищаем поле ввода
+    setNewTag("");
+  };
 
-      const updatedItems = [...items];
-      updatedItems[index] = updatedItem;
+  // Функция для удаления тега
+  const handleRemoveTag = (tagToRemove) => {
+    const updatedTags = tags.filter((tag) => tag !== tagToRemove);
+    setTags(updatedTags);
 
-      localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
-      // setSnippets(updatedItems);
+    if (id) {
+      const items = JSON.parse(localStorage.getItem("codeSnippets"));
+      const index = items.findIndex((item) => item.id === id);
+      if (index !== -1) {
+        const updatedItem = {
+          ...items[index],
+          tags: updatedTags,
+        };
+        const updatedItems = [...items];
+        updatedItems[index] = updatedItem;
+        localStorage.setItem("codeSnippets", JSON.stringify(updatedItems));
+      }
     }
   };
 
@@ -158,19 +188,30 @@ export default function CodeEditor() {
           <div className="editor__tags">
             <label>Теги</label>
             <div className="editor__tags-input-group">
-              <input type="text" placeholder="Добавьте тег..." />
+              <input
+                type="text"
+                placeholder="Добавьте тег..."
+                value={newTag} // Связываем с состоянием
+                onChange={(e) => setNewTag(e.target.value)} // Обновляем состояние при вводе
+              />
               <button
                 type="button"
                 className="editor__tags-add"
-                onClick={(e) => handleAddTag(e.target.value)}
+                onClick={handleAddTag} // Убираем value и onChange с кнопки
               >
                 Добавить
               </button>
             </div>
             <ul className="editor__tags-list">
-              {/* Список тегов будет здесь */}
-              <li className="editor__tag">react</li>
-              <li className="editor__tag">javascript</li>
+              {tags.map((tag, index) => (
+                <li
+                  key={index}
+                  className="editor__tag"
+                  onClick={() => handleRemoveTag(tag)}
+                >
+                  {tag}
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -189,13 +230,15 @@ export default function CodeEditor() {
         <div className="editor__code-section">
           <div className="editor__code-header">
             <span className="editor__code-label">Код</span>
-            <span className="editor__code-language">JavaScript</span>
+            <span className="editor__code-language">
+              {selectedLanguage?.label || "JavaScript"}
+            </span>
           </div>
           <div className="editor__ide">
             <Editor
               value={code}
               onChange={(value) => setCode(value || "")}
-              defaultLanguage="javascript"
+              language={selectedLanguage?.value || "javascript"}
               defaultValue="// Напишите ваш код здесь"
               theme="vs-dark"
               options={{

@@ -1,8 +1,16 @@
 import React from "react";
 import "./SnippetItem.scss";
-import { Link } from "react-router-dom";
+import { Star } from "lucide-react";
 export default function SnippetItem(props) {
-  const { id, title, description, tags } = props;
+  const { id, title, description, tags, isFavorite, onToggleFavorite } = props;
+
+  const handleFavoriteClick = (e) => {
+    // карточка обёрнута в <Link> — не даём перейти в редактор при клике по звезде
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite?.(id);
+  };
+
   return (
     <li className="snippet__item">
       <div className="snippet__icon">
@@ -27,7 +35,23 @@ export default function SnippetItem(props) {
       <div className="snippet__content">
         <div className="snippet__header">
           <div className="snippet__title">{title}</div>
-          <div className="snippet__id">{id}</div>
+          <div className="snippet__header-right">
+            <div className="snippet__id">{id}</div>
+            <button
+              type="button"
+              className={`snippet__favorite ${
+                isFavorite ? "snippet__favorite--active" : ""
+              }`}
+              onClick={handleFavoriteClick}
+              aria-label={isFavorite ? "Убрать из избранного" : "В избранное"}
+              title={isFavorite ? "Убрать из избранного" : "В избранное"}
+            >
+              <Star
+                size={20}
+                fill={isFavorite ? "currentColor" : "none"}
+              />
+            </button>
+          </div>
         </div>
 
         <p className="snippet__description">{description}</p>

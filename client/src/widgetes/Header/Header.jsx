@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Filter, Plus } from "lucide-react";
+import { Search, Star, Plus } from "lucide-react";
 import "./Header.scss";
 
 export default function Header({
@@ -7,6 +7,7 @@ export default function Header({
   onSearchChange,
   onFilterClick,
   onCreateClick,
+  filterActive,
 }) {
   return (
     <header className="header">
@@ -23,10 +24,18 @@ export default function Header({
           />
         </div>
 
-        {/* Кнопка фильтров */}
-        <button onClick={onFilterClick} className="header__filter-btn">
-          <Filter className="header__filter-icon" />
-          <span>Фильтры</span>
+        {/* Фильтр «только избранное» */}
+        <button
+          onClick={onFilterClick}
+          className={`header__filter-btn ${
+            filterActive ? "header__filter-btn--active" : ""
+          }`}
+        >
+          <Star
+            className="header__filter-icon"
+            fill={filterActive ? "currentColor" : "none"}
+          />
+          <span>{filterActive ? "Все сниппеты" : "Избранное"}</span>
         </button>
 
         {/* Кнопка создания */}

@@ -3,57 +3,74 @@ import SnippetItem from "../SnippetItem/SnippetItem";
 import "./SnippetCard.scss";
 import { Link } from "react-router-dom";
 import Fuse from "fuse.js";
-export default function SnippetCard({ searchQuery }) {
-  const defaultSnippets = [
-    {
-      id: "1",
-      title: "Async/Await Fetch",
-      description: "Получение данных с помощью async/await",
-      tags: ["javascript", "async", "api", "fetch"],
-    },
-    {
-      id: "2",
-      title: "useEffect Hook",
-      description: "Управление побочными эффектами в функциональных",
-      tags: ["react", "hooks", "useEffect", "lifecycle"],
-    },
-    {
-      id: "3",
-      title: "Array Methods",
-      description: "Методы массивов: map, filter, reduce",
-      tags: ["javascript", "arrays", "methods"],
-    },
-    {
-      id: "4",
-      title: "CSS Flexbox",
-      description: "Изучаем Flexbox для создания гибких макетов",
-      tags: ["css", "flexbox", "layout"],
-    },
-    {
-      id: "5",
-      title: "Python Basics",
-      description: "Основы Python для начинающих",
-      tags: ["python", "basics", "programming"],
-    },
-    {
-      id: "6",
-      title: "Grid Layout",
-      description: "Создание сложных сеток с CSS Grid",
-      tags: ["css", "grid", "layout", "responsive"],
-    },
-  ];
 
+const defaultSnippets = [
+  {
+    id: "1",
+    title: "Async/Await Fetch",
+    description: "Получение данных с помощью async/await",
+    tags: ["javascript", "async", "api", "fetch"],
+  },
+  {
+    id: "2",
+    title: "useEffect Hook",
+    description: "Управление побочными эффектами в функциональных",
+    tags: ["react", "hooks", "useEffect", "lifecycle"],
+  },
+  {
+    id: "3",
+    title: "Array Methods",
+    description: "Методы массивов: map, filter, reduce",
+    tags: ["javascript", "arrays", "methods"],
+  },
+  {
+    id: "4",
+    title: "CSS Flexbox",
+    description: "Изучаем Flexbox для создания гибких макетов",
+    tags: ["css", "flexbox", "layout"],
+  },
+  {
+    id: "5",
+    title: "Python Basics",
+    description: "Основы Python для начинающих",
+    tags: ["python", "basics", "programming"],
+  },
+  {
+    id: "6",
+    title: "Grid Layout",
+    description: "Создание сложных сеток с CSS Grid",
+    tags: ["css", "grid", "layout", "responsive"],
+  },
+];
+
+export default function SnippetCard({ searchQuery, showFavoritesOnly }) {
   const [snippets, setSnippets] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const toggleFavorite = (snippetId) => {
+    const updated = snippets.map((s) =>
+      s.id === snippetId ? { ...s, isFavorite: !s.isFavorite } : s,
+    );
+    setSnippets(updated);
+    localStorage.setItem("codeSnippets", JSON.stringify(updated));
+  };
+
   const filteredSnippets = (() => {
-    if (!searchQuery) return snippets;
+    let result = snippets;
 
-    const fuse = new Fuse(snippets, {
-      keys: ["title"],
-    });
+    if (showFavoritesOnly) {
+      result = result.filter((s) => s.isFavorite);
+    }
 
-    return fuse.search(searchQuery).map((res) => res.item);
+    if (searchQuery) {
+      const fuse = new Fuse(result, {
+        keys: ["title", "description", "tags"],
+        threshold: 0.4,
+      });
+      result = fuse.search(searchQuery).map((res) => res.item);
+    }
+
+    return result;
   })();
 
   // можно будет вынести этот код с помощью кастомного хука
@@ -96,12 +113,24 @@ export default function SnippetCard({ searchQuery }) {
     return <div>Загрузка...</div>;
   }
 
+  if (filteredSnippets.length === 0) {
+    return (
+      <div className="card__container">
+        <p className="card__empty">
+          {showFavoritesOnly
+            ? "В избранном пока пусто. Отметьте сниппеты звездой."
+            : "Ничего не найдено."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="card__container">
       <ul className="card__list">
         {filteredSnippets.map((snippet) => (
           <Link key={snippet.id} to={`/editor/${snippet.id}`}>
-            <SnippetItem {...snippet} />{" "}
+            <SnippetItem {...snippet} onToggleFavorite={toggleFavorite} />{" "}
           </Link>
         ))}
       </ul>

@@ -13,8 +13,6 @@ export const saveSnippet = (snippet) => {
   }
 
   const existingIndex = snippets.findIndex((s) => s.id === snippet.id);
-  console.log(existingIndex);
-  console.log(snippet.id);
   if (existingIndex === -1) {
     snippets.push(snippet);
   } else {

@@ -5,6 +5,7 @@ import Layout from "./layout";
 const LayoutWithNavigate = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   const handleCreateClick = () => {
     navigate(`/editor/new`);
@@ -15,6 +16,8 @@ const LayoutWithNavigate = () => {
       onCreateClick={handleCreateClick}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
+      showFavoritesOnly={showFavoritesOnly}
+      onToggleFavoritesFilter={() => setShowFavoritesOnly((v) => !v)}
     />
   );
 };

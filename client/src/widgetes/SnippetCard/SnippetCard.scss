@@ -15,3 +15,10 @@
   /* Если нужен цвет для всего списка */
   color: green;
 }
+
+.card__empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #6b7280; /* gray-500 */
+  font-size: 1.125rem;
+}

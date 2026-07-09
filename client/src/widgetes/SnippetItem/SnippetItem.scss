@@ -60,6 +60,35 @@
   margin-bottom: 8px;
 }
 
+.snippet__header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.snippet__favorite {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #cbd5e1;
+  transition:
+    color 150ms ease-in-out,
+    transform 150ms ease-in-out;
+
+  &:hover {
+    color: #f59e0b;
+    transform: scale(1.15);
+  }
+
+  &--active {
+    color: #f59e0b;
+  }
+}
+
 .snippet__title {
   font-weight: 600;
   font-size: 12px;

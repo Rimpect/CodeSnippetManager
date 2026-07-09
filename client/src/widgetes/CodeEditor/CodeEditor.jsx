@@ -72,8 +72,13 @@ export default function CodeEditor() {
   const handleAddTag = () => {
     const tagValue = newTag.trim();
 
-    if (!tagValue || tagValue.length >= 10) {
+    if (!tagValue) {
       alert("Введите тег");
+      return;
+    }
+
+    if (tagValue.length >= 10) {
+      alert("Тег слишком длинный (не более 9 символов)");
       return;
     }
 
@@ -166,7 +171,7 @@ export default function CodeEditor() {
           <div className="editor__select">
             <label>Язык программирования</label>
             <Select
-              defaultValue={selectedLanguage}
+              value={selectedLanguage}
               onChange={setSelectedLanguage}
               options={language}
               placeholder="Выберите..."
